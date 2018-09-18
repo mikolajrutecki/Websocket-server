@@ -1,0 +1,39 @@
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+    #map {
+        height: 100%;
+        position:absolute;
+        top:0;
+        bottom:0;
+        left:0;
+        right:0;
+        z-index:0;
+    }
+
+    #containerID {
+        z-index:1;
+        position:relative;  
+        width:300px;
+        border-style: 2px solid red;
+        border-radius: 5px;
+        background-color: lightgrey; 
+        opacity: 0.70;
+    }
+
+    .list-with-heading {
+        font: bold;
+        opacity:1;
+    }
+
+    .marker-list {
+        font: 200;
+    }
+
+    html, body {
+        height:100%;
+        margin:0;
+        padding:0;
+    }
+
+
+      
