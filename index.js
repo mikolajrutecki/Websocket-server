@@ -14,10 +14,10 @@ app.use(express.static('public'));
 var io = socket(server);
 io.on('connection', function(socket){
     console.log("Made socket connection! ID: " + socket.id);
-    io.on('message', function(data){
+    socket.on('message', function(data){
         console.log(data);
     });
-    io.on('disconnect', function(socket){
+    socket.on('disconnect', function(){
         console.log("Disconnected! ID: " + socket.id);
     });
 });
