@@ -33,6 +33,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     //Listen for events
     socket.on('message',function(data){
-        output.innerHTML += " data: " + data;
+        output.innerHTML += data.text;
+        var base64 = data.image;
+        var img = new Image();
+        img.src = 'data:image/jpeg;base64,'+base64;
+        document.body.appendChild(img);
+
     });
 });
