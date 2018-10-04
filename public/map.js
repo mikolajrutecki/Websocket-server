@@ -6,21 +6,19 @@ let infowindow;
 document.addEventListener("DOMContentLoaded", function(event) { 
     //Connect
     let socket = io.connect('localhost:8000');
-    //QueryDOM
-    let output = document.getElementById('output');
 
     //Listen for events
     socket.on('message',function(data){
-        output.innerHTML += data.text;
-        locations.push(['TEST',data.lat, data.lng]);
+        locations.push([data.text,data.lat, data.lng]);
         addMarker();
-        var base64 = data.image;
-        var img = new Image();
+        let base64 = data.image;
+        let img = new Image();
         img.src = 'data:image/jpeg;base64,'+base64;
         document.body.appendChild(img);
     });
 });
 
+//initialize map
 function initMap() {
     //var myLatLng = {lat: 53.123482, lng: 18.008438};
       map = new google.maps.Map(document.getElementById('map'), {
@@ -30,6 +28,7 @@ function initMap() {
 
     infowindow = new google.maps.InfoWindow();
   }
+
 
 function createMarker(latlng, content){
     let marker = new google.maps.Marker({
@@ -44,9 +43,10 @@ function createMarker(latlng, content){
     return marker;
 }
 
+//adds marker to the map
 function addMarker(){
     let i = locations.length - 1;
-    createMarker(new google.maps.LatLng(locations[i][1], locations[i][2]), null);
+    createMarker(new google.maps.LatLng(locations[i][1], locations[i][2]), locations[i][0]);
 }
 
 
