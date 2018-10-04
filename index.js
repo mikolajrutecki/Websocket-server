@@ -15,7 +15,7 @@ var io = socket(server);
 io.on('connection', (socket) => {
     console.log("Made socket connection! ID: " + socket.id);
     socket.on('message', (data) => {
-        console.log(data);
+        //console.log(data);
         io.sockets.emit('message', data);
     });
     socket.on('disconnect', () => {
