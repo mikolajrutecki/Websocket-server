@@ -2,6 +2,7 @@ let locations = [];
 let markers = [];
 let map;
 let infowindow;
+let base64;
 
 document.addEventListener("DOMContentLoaded", function(event) { 
     //Connect
@@ -9,12 +10,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     //Listen for events
     socket.on('message',function(data){
-        locations.push([data.text,data.lat, data.lng]);
+        base64 = data.image;
+        locations.push([data.text, data.lat, data.lng]);
         addMarker();
-        let base64 = data.image;
-        let img = new Image();
-        img.src = 'data:image/jpeg;base64,'+base64;
-        document.body.appendChild(img);
     });
 });
 
@@ -46,7 +44,29 @@ function createMarker(latlng, content){
 //adds marker to the map
 function addMarker(){
     let i = locations.length - 1;
-    createMarker(new google.maps.LatLng(locations[i][1], locations[i][2]), locations[i][0]);
+    createMarker(new google.maps.LatLng(locations[i][1], locations[i][2]), '<b>' + locations[i][0] +'</b>' + '<br><img src="data:image/jpeg;base64,'+base64+'"width=400 height=300</img>');
 }
 
+// function addImg(img, width, height){
+//     let MAX_WIDTH = width;
+//     let MAX_HEIGHT = height;
+//     width = img.width;
+//     height = img.height;
+
+//     if(width > height){
+//         if(width > MAX_WIDTH){
+//             height *= MAX_WIDTH / width;
+//             width = MAX_WIDTH;
+//         }
+//     } else {
+//         if(height > MAX_HEIGHT){
+//             width *= MAX_HEIGHT / height;
+//             height = MAX_HEIGHT;
+//         }
+//     }
+//     canvas.width = width;
+//     canvas.height = height;
+//     var ctx = canvas.getContext("2d");
+//     ctx.drawImage(img, 0, 0, width, height);
+// }
 
