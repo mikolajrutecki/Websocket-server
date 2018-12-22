@@ -5,6 +5,32 @@ let infowindow;
 let base64;
 
 document.addEventListener("DOMContentLoaded", function(event) { 
+
+    //API GET REQUEST
+    let request = new Request('http://localhost:8001/markers/', {
+        method: 'GET',
+        mode: 'cors',
+        headers: new Headers({
+            'Content-Type': 'application/json'
+        })
+    });
+
+    fetch(request)
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(myJson){
+        for(let i = 0; i < myJson.length; i++){
+            let obj = myJson[i];
+            for(let key in obj){
+                let attrName = key;
+                let attrValue = obj[key]
+                console.log(attrName + ":" + attrValue);
+            }
+        }
+    });
+
+
     //Connect
     let socket = io.connect('localhost:8000');
 
@@ -47,26 +73,4 @@ function addMarker(){
     createMarker(new google.maps.LatLng(locations[i][1], locations[i][2]), '<b>' + locations[i][0] +'</b>' + '<br><img src="data:image/jpeg;base64,'+base64+'"width=400 height=300</img>');
 }
 
-// function addImg(img, width, height){
-//     let MAX_WIDTH = width;
-//     let MAX_HEIGHT = height;
-//     width = img.width;
-//     height = img.height;
-
-//     if(width > height){
-//         if(width > MAX_WIDTH){
-//             height *= MAX_WIDTH / width;
-//             width = MAX_WIDTH;
-//         }
-//     } else {
-//         if(height > MAX_HEIGHT){
-//             width *= MAX_HEIGHT / height;
-//             height = MAX_HEIGHT;
-//         }
-//     }
-//     canvas.width = width;
-//     canvas.height = height;
-//     var ctx = canvas.getContext("2d");
-//     ctx.drawImage(img, 0, 0, width, height);
-// }
 
