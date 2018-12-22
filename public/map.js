@@ -22,22 +22,18 @@ document.addEventListener("DOMContentLoaded", function(event) {
     .then(function(myJson){
         for(let i = 0; i < myJson.length; i++){
             let obj = myJson[i];
-            for(let key in obj){
-                let attrName = key;
-                let attrValue = obj[key]
-                console.log(attrName + ":" + attrValue);
-            }
+            let temp = [obj.id, obj.phone, obj.latitude, obj.longitude, obj.text, obj.picture];
+            locations.push(temp);
+            addMarker();
         }
     });
-
 
     //Connect
     let socket = io.connect('localhost:8000');
 
     //Listen for events
     socket.on('message',function(data){
-        base64 = data.image;
-        locations.push([data.text, data.lat, data.lng]);
+        locations.push([data.id, data.phone, data.latitude, data.longitude, data.text, data.picture]);
         addMarker();
     });
 });
@@ -70,7 +66,9 @@ function createMarker(latlng, content){
 //adds marker to the map
 function addMarker(){
     let i = locations.length - 1;
-    createMarker(new google.maps.LatLng(locations[i][1], locations[i][2]), '<b>' + locations[i][0] +'</b>' + '<br><img src="data:image/jpeg;base64,'+base64+'"width=400 height=300</img>');
+    createMarker(new google.maps.LatLng(locations[i][2], locations[i][3]), '<b>Numer zgłaszającego: ' + locations[i][1] +'</b><br>' + '<b>Treść zgłoszenia: ' 
+    + locations[i][4] +'</b>' + '<br><img src="data:image/jpeg;base64,'+locations[i][5]+'"width=400 height=300</img><br>'
+    +'<button class="btn btn-danger">Usuń marker</button>');
 }
 
 

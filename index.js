@@ -1,9 +1,13 @@
-var express = require('express');
-var socket = require('socket.io');
+let express = require('express');
+let socket = require('socket.io');
+
+let request = require('request')
+
+
 
 //App setup
-var app = express();
-var server = app.listen(8000, () => {
+let app = express();
+let server = app.listen(8000, () => {
     console.log("Listening to requests on port 8000");
 });
 
@@ -11,11 +15,28 @@ var server = app.listen(8000, () => {
 app.use(express.static('public'));
 
 //Socket setup
-var io = socket(server);
+let io = socket(server);
 io.on('connection', (socket) => {
     console.log("Made socket connection! ID: " + socket.id);
     socket.on('message', (data) => {
-        //console.log(data);
+        let json = {
+            'phone': data.phone,
+            'latitude': data.latitude,
+            'longitude': data.longitude,
+            'text': data.text,
+            'picture': data.picture
+        }
+
+        request.post('http://localhost:8001/markers/', {
+            json: json,
+        }, (error, res, body) => {
+            if(error){
+                console.error(error);
+                return
+            }
+            console.log('statusCode: ', res.statusCode);
+            console.log(body);
+        });
         io.sockets.emit('message', data);
     });
     socket.on('disconnect', () => {
