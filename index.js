@@ -3,8 +3,6 @@ let socket = require('socket.io');
 
 let request = require('request')
 
-
-
 //App setup
 let app = express();
 let server = app.listen(8000, () => {
@@ -26,7 +24,6 @@ io.on('connection', (socket) => {
             'text': data.text,
             'picture': data.picture
         }
-
         request.post('http://localhost:8001/markers/', {
             json: json,
         }, (error, res, body) => {

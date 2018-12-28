@@ -3,11 +3,13 @@ let markers = [];
 let map;
 let infowindow;
 let base64;
+let url = 'http://localhost:8001/markers/';
+let clickedMarkerId;
 
 document.addEventListener("DOMContentLoaded", function(event) { 
 
     //API GET REQUEST
-    let request = new Request('http://localhost:8001/markers/', {
+    let request = new Request(url, {
         method: 'GET',
         mode: 'cors',
         headers: new Headers({
@@ -36,6 +38,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
         locations.push([data.id, data.phone, data.latitude, data.longitude, data.text, data.picture]);
         addMarker();
     });
+
+
+
 });
 
 //initialize map
@@ -50,15 +55,17 @@ function initMap() {
   }
 
 
-function createMarker(latlng, content){
+function createMarker(latlng, content, id){
     let marker = new google.maps.Marker({
         position: latlng,
-        map: map
+        map: map,
+        id: id
     });
-
     google.maps.event.addListener(marker, 'click', function(){
         infowindow.setContent(content);
         infowindow.open(map, marker);
+        console.log(marker.id);
+        clickedMarkerId = marker.id;
     });
     return marker;
 }
@@ -68,7 +75,15 @@ function addMarker(){
     let i = locations.length - 1;
     createMarker(new google.maps.LatLng(locations[i][2], locations[i][3]), '<b>Numer zgłaszającego: ' + locations[i][1] +'</b><br>' + '<b>Treść zgłoszenia: ' 
     + locations[i][4] +'</b>' + '<br><img src="data:image/jpeg;base64,'+locations[i][5]+'"width=400 height=300</img><br>'
-    +'<button class="btn btn-danger">Usuń marker</button>');
+    +'<button type="button" class="btn btn-danger delete-marker" onclick="deleteMarker(clickedMarkerId)">Usuń marker</button>',
+    locations[i][0]);
+}
+
+function deleteMarker(id){
+    console.log(id);
+        fetch(url + id + '/', {
+            method: 'delete'
+        });           
 }
 
 
