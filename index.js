@@ -18,6 +18,7 @@ io.on('connection', (socket) => {
     console.log("Made socket connection! ID: " + socket.id);
     socket.on('message', (data) => {
         let json = {
+            // 'id': data.id,
             'phone': data.phone,
             'latitude': data.latitude,
             'longitude': data.longitude,
@@ -33,8 +34,9 @@ io.on('connection', (socket) => {
             }
             console.log('statusCode: ', res.statusCode);
             console.log(body);
+            io.sockets.emit('message', body);
         });
-        io.sockets.emit('message', data);
+        //io.sockets.emit('message', data);
     });
     socket.on('disconnect', () => {
         console.log("Disconnected! ID: " + socket.id);

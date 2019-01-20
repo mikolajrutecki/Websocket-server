@@ -2,9 +2,9 @@ let locations = [];
 let markers = [];
 let map;
 let infowindow;
-let base64;
 let url = 'http://localhost:8001/markers/';
 let clickedMarkerId;
+let clickedMarker;
 
 document.addEventListener("DOMContentLoaded", function(event) { 
 
@@ -35,12 +35,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     //Listen for events
     socket.on('message',function(data){
+        console.log(data.id);
         locations.push([data.id, data.phone, data.latitude, data.longitude, data.text, data.picture]);
         addMarker();
     });
-
-
-
 });
 
 //initialize map
@@ -66,6 +64,7 @@ function createMarker(latlng, content, id){
         infowindow.open(map, marker);
         console.log(marker.id);
         clickedMarkerId = marker.id;
+        clickedMarker = this;
     });
     return marker;
 }
@@ -80,10 +79,11 @@ function addMarker(){
 }
 
 function deleteMarker(id){
-    console.log(id);
         fetch(url + id + '/', {
             method: 'delete'
-        });           
+        });       
+        clickedMarker.setVisible(false);
+        infowindow.close();    
 }
 
 
